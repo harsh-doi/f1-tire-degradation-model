@@ -121,6 +121,12 @@ The script will:
 
 ---
 
+## Acknowledgements
+
+This project was developed with the assistance of [Claude](https://claude.ai) (Anthropic), which helped with MATLAB code architecture, ODE formulation, parameter tuning logic, and debugging across all five milestones.
+
+---
+
 ## Requirements
 
 - MATLAB R2021a or later (uses `ode45`, `subplot`, standard toolboxes only)
