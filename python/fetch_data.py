@@ -5,7 +5,7 @@ import os
 # ══════════════════════════════════════════════════════════════════════
 #  CONFIGURATION — only change these four lines
 # ══════════════════════════════════════════════════════════════════════
-YEAR    = 2026
+YEAR    = 2026                                # Updated for Verstappen Miami 2026
 RACE    = 'Miami'
 SESSION = 'R'           # 'R' = Race, 'Q' = Qualifying, 'FP1/FP2/FP3'
 DRIVER  = 'VER'         # 3-letter driver code
