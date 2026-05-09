@@ -1,7 +1,7 @@
 %% ═══════════════════════════════════════════════════════════════════
 %  F1 TIRE DEGRADATION MODEL
-%  Driver : George Russell
-%  Race   : 2026 Japanese Grand Prix, Suzuka
+%  Driver : Max Verstappen
+%  Race   : 2026 Miami Grand Prix, Miami
 %
 %  MILESTONE 1 — Load data and build heat input profile Q(t)
 %% ═══════════════════════════════════════════════════════════════════
