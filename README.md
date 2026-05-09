@@ -97,7 +97,7 @@ $$t_{lap} = t_{ref} \cdot \sqrt{\frac{\mu_{ref}}{\mu(T_s)}}$$
 ## Validation Plots
 
 ### Russell — Japanese GP (Medium, 21 laps)
-![Russell Japan Validation](plots/validation_russell_japan2026.png)
+![Russell Japan Validation](plots/validation_g_russell_japan2026.png)
 
 ### Verstappen — Miami GP (Hard, 46 laps)
 ![Verstappen Miami Validation](plots/validation_verstappen_miami2026.png)
