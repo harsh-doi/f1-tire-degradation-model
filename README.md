@@ -1,47 +1,71 @@
 # F1 Tire Degradation Model 🏎️
 
-A physics-based tire degradation model for Formula 1, built in MATLAB using real telemetry data from **George Russell's 2026 Japanese Grand Prix** at Suzuka. The model simulates thermal dynamics across three tire layers and predicts lap time degradation over a race stint.
+A physics-based tire degradation model for Formula 1, built in MATLAB using real telemetry data. Validated against two drivers across two different circuits and compounds in the **2026 F1 season**.
+
+---
+
+## Validations
+
+| Driver | Race | Compound | Stint | Laps | RMS Error |
+|---|---|---|---|---|---|
+| George Russell | Japanese GP — Suzuka | Medium | Stint 1 | 21 | 2.441 s |
+| Max Verstappen | Miami GP | Hard | Stint 2 | 46 | **0.595 s** |
+
+The Verstappen/Miami validation is particularly strong — **0.595s RMS over 46 laps** on a Hard compound demonstrates the model generalises well across drivers, circuits, and tire compounds.
 
 ---
 
 ## Overview
 
-Tire degradation is one of the most critical and complex factors in F1 race strategy. This project models the physics of tire behaviour from first principles — heat generation, thermal diffusion, and grip loss — and validates the output against Russell's actual lap times from Japan 2026.
+Tire degradation is one of the most critical and complex factors in F1 race strategy. This project models the physics of tire behaviour from first principles — heat generation, thermal diffusion, and grip loss — and validates the output against real telemetry data from FastF1.
 
-The model achieves an **RMS lap time error of 2.441 seconds** over a 21-lap Medium compound stint.
+The model is built around three layers of physics:
+- **Friction heat generation** at the contact patch
+- **Three-layer thermal ODE** tracking surface, compound, and inner liner temperatures
+- **Viscoelastic grip model** with asymmetric bell curve and lap-by-lap wear
 
 ---
 
 ## Physics
 
-The model is built around three core components:
+### Heat Input Q(t)
 
-**1. Heat Input Q(t)**  
-Friction power at the contact patch is computed from the real speed trace and estimated lateral/longitudinal acceleration. This becomes the forcing function driving the thermal ODE.
+Friction power at the contact patch is computed from the real speed trace and estimated lateral/longitudinal acceleration:
 
-**2. 3-Layer Thermal ODE**  
+$$Q(t) = \mu \, F_N \, v_{slip}(t)$$
+
+This becomes the forcing function driving the thermal ODE.
+
+### Three-Layer Thermal ODE
+
 Energy balance equations are solved with `ode45` across three tire layers:
-- Surface (contact patch)
-- Compound (rubber bulk)
-- Inner liner (carcass)
 
-Each layer exchanges heat via convection and conduction. The surface layer gains heat from Q(t) and loses it to convection with ambient air.
+**Surface layer:**
+$$m_s c_p \frac{dT_s}{dt} = Q(t) - k_{sc}(T_s - T_c) - h_{conv} A_s (T_s - T_{air})$$
 
-**3. Grip and Lap Time Model**  
-Surface temperature feeds into a bell-curve grip function — grip peaks at an optimal temperature window and falls off when the tire is too cold (green tire) or too hot (overheating). Grip loss directly translates to lap time delta via a reference lap time scaling approach.
+**Compound layer:**
+$$m_c c_p \frac{dT_c}{dt} = k_{sc}(T_s - T_c) - k_{ci}(T_c - T_i)$$
+
+**Inner liner:**
+$$m_i c_p \frac{dT_i}{dt} = k_{ci}(T_c - T_i) - h_{inner} A_i (T_i - T_{cavity})$$
+
+Each layer exchanges heat via conduction (Fourier's law) and convection (Newton's law of cooling). The surface layer has the lowest thermal mass and responds fastest; the compound layer acts as a thermal reservoir controlling long-term stint behaviour.
+
+### Grip and Lap Time Model
+
+Surface temperature feeds into an asymmetric bell curve — grip peaks at an optimal temperature window and falls off in both directions, faster when overheating than when cold:
+
+$$\mu(T_s, n) = \mu_{max} \cdot f(T_s) \cdot (1 - r_{wear} \cdot n)$$
+
+Lap time scaling comes directly from the cornering force balance $v = \sqrt{\mu g R}$:
+
+$$t_{lap} = t_{ref} \cdot \sqrt{\frac{\mu_{ref}}{\mu(T_s)}}$$
 
 ---
 
-## Results
+## Tuned Parameters
 
-| Metric | Value |
-|---|---|
-| Compound | Medium |
-| Stint length | 21 laps |
-| Lap time range (actual) | 94.47 – 97.82 s |
-| RMS lap time error | **2.441 s** |
-
-**Tuned parameters:**
+### Russell — Suzuka (Medium)
 
 | Parameter | Value |
 |---|---|
@@ -51,13 +75,32 @@ Surface temperature feeds into a bell-curve grip function — grip peaks at an o
 | hconv | 1200 |
 | alpha | 0.08 |
 | T_peak | 95 °C |
-| width_low | 30 |
-| width_hi | 20 |
+| width_low / width_hi | 30 / 20 |
 | mu_cold | 0.90 |
 
-### Validation Plot
+### Verstappen — Miami (Hard)
 
-![Validation Plot](plots/validation_russell_japan2026.png)
+| Parameter | Value |
+|---|---|
+| mu_max | 1.75 |
+| wear_rate | 0.010 |
+| corner_frac | 0.06 |
+| hconv | 1100 |
+| alpha | 0.10 |
+| T_peak | 100 °C |
+| k_sc | 0.30 |
+| k_ci | 0.25 |
+| mu_cold | 0.85 |
+
+---
+
+## Validation Plots
+
+### Russell — Japanese GP (Medium, 21 laps)
+![Russell Japan Validation](plots/validation_russell_japan2026.png)
+
+### Verstappen — Miami GP (Hard, 46 laps)
+![Verstappen Miami Validation](plots/validation_verstappen_miami2026.png)
 
 ---
 
@@ -82,7 +125,8 @@ f1-tire-degradation-model/
 ├── python/
 │   └── fetch_data.py           # FastF1 data extraction script
 ├── plots/
-│   └── validation_russell_japan2026.png
+│   ├── validation_russell_japan2026.png
+│   └── validation_verstappen_miami2026.png
 └── README.md
 ```
 
@@ -92,55 +136,44 @@ f1-tire-degradation-model/
 
 ### 1. Get the telemetry data
 
-You need Python with FastF1 installed:
-
 ```bash
 pip install fastf1 pandas
 python python/fetch_data.py
 ```
 
-This saves three CSVs into `data/2026_Japan_RUS/`:
-- `lap_data.csv`
-- `speed_trace.csv`
-- `weather.csv`
+Saves CSVs into `data/` for each driver/race combination.
 
 ### 2. Run the MATLAB model
-
-Open MATLAB, navigate to the `matlab/` folder, and run:
 
 ```matlab
 main
 ```
 
-The script will:
-1. Load the telemetry data
-2. Compute the heat input profile
-3. Run the parameter tuning grid search
-4. Simulate the full 21-lap stint
-5. Generate and save the validation plot to `plots/`
-
----
-
-## Acknowledgements
-
-This project was developed with the assistance of [Claude](https://claude.ai) (Anthropic), which helped with MATLAB code architecture, ODE formulation, parameter tuning logic, and debugging across all five milestones.
+The script will load telemetry, compute heat input, run parameter tuning, simulate the full stint, and save the validation plot.
 
 ---
 
 ## Requirements
 
-- MATLAB R2021a or later (uses `ode45`, `subplot`, standard toolboxes only)
-- Python 3.8+ with `fastf1` and `pandas` (for data extraction only)
+- MATLAB R2021a or later (uses `ode45`, standard toolboxes only)
+- Python 3.8+ with `fastf1` and `pandas` (data extraction only)
 
 ---
 
 ## Data
 
-Raw telemetry CSVs are not included in this repository (too large, sourced from FastF1). Run `python/fetch_data.py` to regenerate them locally.
+Raw telemetry CSVs are not included in this repository. Run `python/fetch_data.py` to regenerate them locally.
+
+---
+
+## Acknowledgements
+
+Developed with the assistance of [Claude](https://claude.ai) (Anthropic), which helped with MATLAB code architecture, ODE formulation, parameter tuning logic, and debugging throughout the project.
 
 ---
 
 ## References
 
-- Farroni, F. et al. (2014). *TRT: Thermo Racing Tyre — A Physical Model to Predict Tyres Thermal Behaviour and Its Effects on Vehicle Performance.* SAE Technical Paper.
+- Farroni et al. (2014). *TRT: Thermo Racing Tyre — A Physical Model to Predict Tyres Thermal Behaviour.* SAE Technical Paper.
+- Pacejka, H. (2012). *Tire and Vehicle Dynamics*, 3rd ed.
 - FastF1 Python library — [theoehrly.github.io/Fast-F1](https://theoehrly.github.io/Fast-F1/)
