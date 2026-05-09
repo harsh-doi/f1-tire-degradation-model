@@ -5,7 +5,7 @@ function [lap_times_pred] = run_stint_fast(t_s, Q, meta, params)
 % and skips console printing for speed
 
     n_laps  = meta.n_laps;
-    lap_ref = 94.47;
+    lap_ref = 93.11;
 
     % Initial temperatures
     T_start = [meta.T_track + 5; meta.T_track; meta.T_track - 5];

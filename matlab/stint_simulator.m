@@ -31,7 +31,7 @@ function [results] = stint_simulator(t_s, Q, meta, params_grip)
     results.lap_time_pred = zeros(n_laps, 1);
 
     % ── Reference lap time — fastest real lap ─────────────────────────
-    lap_ref = 94.47;    % Russell fastest lap Japan 2026 stint 1
+    lap_ref = 93.11;    % Verstappen fastest lap Miami 2026 stint 2
 
     % ── Initial tire temperature — start of stint ─────────────────────
     T_init = [meta.T_track + 5; ...    % surface

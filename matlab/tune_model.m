@@ -23,9 +23,9 @@ function [best_params, best_error] = tune_model(t_s, Q, meta, lap_actual)
 
     % ── Parameter search grid ─────────────────────────────────────────
     % Vary the three most sensitive parameters
-    wear_rates     = [0.004, 0.006, 0.008, 0.010, 0.012];
-    corner_fracs   = [0.14, 0.15, 0.16, 0.17, 0.18];
-    mu_max_vals    = [1.60, 1.63, 1.65, 1.68, 1.70];
+    wear_rates     = [0.002, 0.004, 0.006, 0.008, 0.010];
+    corner_fracs   = [0.06, 0.08, 0.10, 0.12, 0.14];
+    mu_max_vals    = [1.55, 1.60, 1.65, 1.70, 1.75];
 
     best_error  = inf;
     best_params = struct();

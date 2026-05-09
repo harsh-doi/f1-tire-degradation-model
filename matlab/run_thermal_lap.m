@@ -11,17 +11,17 @@ function [t_out, T_out] = run_thermal_lap(t_s, Q, meta, T0)
 %   T0   — initial temperatures [T_surface; T_compound; T_inner]
 
     % ── Compound properties (Medium — Farroni TRT 2014) ───────────────
-    params.k_sc  = 0.25;
-    params.k_ci  = 0.20;
+    params.k_sc  = 0.30;
+    params.k_ci  = 0.25;
     params.rCp_s = 1.65e6;
     params.rCp_c = 1.80e6;
     params.rCp_i = 2.00e6;
     params.h_s   = 0.008;
     params.h_c   = 0.020;
     params.h_i   = 0.015;
-    params.hconv = 1200;
-    params.alpha = 0.08;
-    params.T_air = meta.T_air;
+    params.hconv = 1100;
+    params.alpha = 0.10;
+    params.T_air = meta.T_air; % 27.3 C
     params.T_rim = meta.T_air + 10;
 
     % ── Build Q interpolant ───────────────────────────────────────────

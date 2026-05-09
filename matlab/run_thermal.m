@@ -81,7 +81,7 @@ function [t_out, T_out] = run_thermal(t_s, Q, meta)
 
     xlabel('Time (s)')
     ylabel('Temperature (C)')
-    title(sprintf('Russell — Japan 2026 Stint %d (%s) — Lap Thermal Model', ...
+    title(sprintf('Verstappen — Miami 2026 Stint %d (%s) — Lap Thermal Model', ...
                   meta.stint, meta.compound))
     legend('Location', 'southeast')
     grid on

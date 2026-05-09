@@ -7,7 +7,7 @@ function [lap, telem, weather, meta] = load_data(stint_num)
 %         weather   — weather conditions table
 %         meta      — struct with boundary condition scalars
 
-    base = '../data/2026_Japan_RUS/';
+    base = '../data/2026_Miami_VER/';
 
     % ── Read index manually (avoids MATLAB CSV parsing issues) ────────
     raw  = readlines([base 'index.csv']);
@@ -35,7 +35,7 @@ function [lap, telem, weather, meta] = load_data(stint_num)
 
     lap = lap(~isnan(lap.LapTime_s) & ...
                lap.LapTime_s > 88   & ...
-               lap.LapTime_s < 110, :);
+               lap.LapTime_s < 100, :);
 
     fprintf('  Valid laps   : %d\n',     height(lap));
     fprintf('  Lap time min : %.2f s\n', min(lap.LapTime_s));

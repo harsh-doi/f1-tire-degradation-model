@@ -9,7 +9,7 @@ function [t_s, Q] = heat_input(telem, meta)
     g         = 9.81;       % m/s^2
     mu        = 1.6;        % friction coefficient
     A_contact = 0.04;       % contact patch area m^2
-    slip_base = 0.0015;       % baseline rolling slip
+    slip_base = 0.0020;       % baseline rolling slip
     rho_air   = 1.2;        % kg/m^3
     Cl        = 3.5;        % downforce coefficient
     A_ref     = 1.5;        % reference area m^2
@@ -55,7 +55,7 @@ function [t_s, Q] = heat_input(telem, meta)
     Fz     = (m_car * g + F_aero) / 4;
 
     % ── Slip velocity ─────────────────────────────────────────────────
-    slip   = slip_base + 0.006 * brake + 0.003 * throttle;
+    slip   = slip_base + 0.008 * brake + 0.004 * throttle;
     v_slip = v_ms .* slip;
 
     % ── Friction heat ─────────────────────────────────────────────────
@@ -67,7 +67,7 @@ function [t_s, Q] = heat_input(telem, meta)
     subplot(3,1,1)
     plot(t_s, v_ms * 3.6, 'Color', [0.22 0.62 0.85], 'LineWidth', 1.2)
     ylabel('Speed (km/h)')
-    title(sprintf('Russell — Japan 2026 Stint %d (%s) — Fastest Lap', ...
+    title(sprintf('Verstappen — Miami 2026 Stint %d (%s) — Fastest Lap', ...
                   meta.stint, meta.compound))
     grid on
     xlim([0 t_s(length(t_s))])

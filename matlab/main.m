@@ -9,7 +9,7 @@
 clc; clear; close all;
 
 %% ── Configuration ────────────────────────────────────────────────────
-STINT = 1;      % 1 = Medium, 2 = Hard
+STINT = 2;      % Hard compound, 51 laps
 
 %% ── M1: Load data ────────────────────────────────────────────────────
 fprintf('==============================\n')
@@ -57,7 +57,7 @@ fprintf('When satisfied, we move to M2.\n')
 clc; clear; close all;
 
 %% ── Configuration ────────────────────────────────────────────────────
-STINT = 1;      % 1 = Medium, 2 = Hard
+STINT = 2;      % 1 = Medium, 2 = Hard
 
 %% ── M1: Load data ────────────────────────────────────────────────────
 fprintf('==============================\n')
@@ -91,7 +91,7 @@ fprintf('When satisfied, we move to M3.\n')
 clc; clear; close all;
 
 %% ── Configuration ────────────────────────────────────────────────────
-STINT = 1;      % 1 = Medium, 2 = Hard
+STINT = 2;      % 1 = Medium, 2 = Hard
 
 %% ── M1: Load data ────────────────────────────────────────────────────
 fprintf('==============================\n')
@@ -119,13 +119,13 @@ fprintf('\n==============================\n')
 fprintf(' M3: Grip Model\n')
 fprintf('==============================\n')
 
-% ── Grip parameters for Medium compound ──────────────────────────────
-params_grip.mu_max    = 1.65;   % peak grip coefficient
-params_grip.T_peak    = 95;     % optimal temperature (C)
-params_grip.width_low = 30;     % rise width (C) — gradual warmup
-params_grip.width_hi  = 20;     % fall width (C) — sharper overheat drop
-params_grip.mu_cold   = 0.90;   % cold baseline grip
-params_grip.wear_rate = 0.012;  % mu_max loss per lap
+% Hard compound parameters — higher optimal temp, wider window, slower wear ──────────────────────────────
+params_grip.mu_max    = 1.60;   % hard compound slightly less peak grip
+params_grip.T_peak    = 100;    % hard peaks at higher temp
+params_grip.width_low = 35;     % wider window — more forgiving
+params_grip.width_hi  = 25;     % less aggressive drop-off
+params_grip.mu_cold   = 0.85;   % slightly lower cold grip
+params_grip.wear_rate = 0.006;  % slower wear than medium
 
 % ── Compute grip for lap 1 ────────────────────────────────────────────
 T_surface = T_out(:, 1);        % surface temperature from ODE
@@ -183,7 +183,7 @@ fprintf('When satisfied, we move to M4 — full stint loop.\n')
 clc; clear; close all;
 
 %% ── Configuration ────────────────────────────────────────────────────
-STINT = 1;      % 1 = Medium, 2 = Hard
+STINT = 2;      % 1 = Medium, 2 = Hard
 
 %% ── M1: Load data ────────────────────────────────────────────────────
 fprintf('==============================\n')
@@ -236,7 +236,7 @@ if ~exist('../plots', 'dir')
 end
 
 %% ── Configuration ────────────────────────────────────────────────────
-STINT = 1;
+STINT = 2;
 
 %% ── M1: Load data ────────────────────────────────────────────────────
 fprintf('==============================\n')

@@ -18,7 +18,7 @@ function plot_validation(results, lap_actual, best_error)
          'LineWidth', 2, 'MarkerSize', 5, 'DisplayName', 'Model prediction')
     hold on
     plot(actual_laps, actual_times, 'w-s', ...
-         'LineWidth', 2, 'MarkerSize', 6, 'DisplayName', 'Russell actual')
+         'LineWidth', 2, 'MarkerSize', 6, 'DisplayName', 'Verstappen actual')
 
     % Error band — ±1s acceptable range
     fill([lap_nums; flipud(lap_nums)], ...
@@ -28,7 +28,7 @@ function plot_validation(results, lap_actual, best_error)
 
     xlabel('Lap number', 'FontSize', 11)
     ylabel('Lap time (s)', 'FontSize', 11)
-    title(sprintf(['Predicted vs Actual Lap Time — Russell Japan 2026 Stint 1 (Medium)\n' ...
+    title(sprintf(['Predicted vs Actual Lap Time — Verstappen Miami 2026 Stint 2 (Hard)\n' ...
                    'RMS Error = %.3f s'], best_error), 'FontSize', 11)
     legend('Location', 'northwest', 'FontSize', 9)
     grid on
@@ -70,10 +70,10 @@ function plot_validation(results, lap_actual, best_error)
     grid on
     xlim([1 lap_nums(length(lap_nums))])
 
-    sgtitle('Russell — Japan 2026 Stint 1 (Medium) — Model Validation', ...
+    sgtitle('Verstappen — Miami 2026 Stint 2 (Hard) — Model Validation', ...
             'FontSize', 12, 'FontWeight', 'bold')
 
     % ── Save figure ───────────────────────────────────────────────────
-    saveas(gcf, '../plots/validation_russell_japan2026.png')
+    saveas(gcf, '../plots/validation_verstappen_miami2026.png')
     fprintf('  Validation plot saved to ../plots/\n')
 end
